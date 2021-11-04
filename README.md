@@ -1,23 +1,23 @@
 # Color -> Tui
 
 [![build](https://img.shields.io/drone/build/uttarayan/color-parser-tui?server=https%3A%2F%2Fdrone.uttarayan.me)][color-parser-tui]
-[![build](https://github.com/uttarayan21/color-parser-tui/actions/workflows/build.yaml/badge.svg)][mirror]
-Parse hex colors to tui rgb colors
+[![build](https://github.com/uttarayan21/color-parser-tui/actions/workflows/build.yaml/badge.svg)][mirror]  
+
+
+Parse hex colors to tui rgb colors  
 
 <span style="color: #c3f111">`#c3f111`</span> -> `Color::Rgb(195,241,17)`
 
-Note that the indexed colors are **NOT HEX**
-<span style="color: #afaf00">`#142`</span> -> `Color::Indexed(142)`
+Note that the indexed colors are **NOT HEX**  
+<span style="color: #afaf00">`#142`</span> -> `Color::Indexed(142)`  
 
 Example
 
 ```rust
 #[derive(Serialize, Deserialize, PartialEq)]
 sruct ColorStruct {
-
     #[serde(with = "color-parser-tui"]
     color: tui::style::Color,
-
     #[serde(with = "color-parser-tui::optional"]
     optional_color: Option<tui::style::Color>,
 }
