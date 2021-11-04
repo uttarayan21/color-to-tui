@@ -1,7 +1,13 @@
 [package]
 name = "color-parser-tui"
-version = "0.1.0"
+version = "0.1.1"
+authors = ["Uttarayan Mondal <uttarayan21@gmail.com>"]
 edition = "2021"
+description = "Parse colors and convert them to tui::style::Colors"
+homepage = "https://git.uttarayan.me/uttarayan/color-parser-tui"
+repository = "https://git.uttarayan.me/uttarayan/color-parser-tui"
+license = "MIT"
+exclude = [".drone.yml", ".github/*"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

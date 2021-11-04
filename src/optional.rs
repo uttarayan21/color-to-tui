@@ -1,9 +1,12 @@
-pub mod optional;
-
 use serde::{Deserialize, Deserializer, Serializer};
 use tui::style::Color;
 
-pub fn serialize<S: Serializer>(color: &Color, serializer: S) -> Result<S::Ok, S::Error> {
+pub fn serialize<S: Serializer>(color: &Option<Color>, serializer: S) -> Result<S::Ok, S::Error> {
+    use serde::ser::Error;
+    if color.is_none() {
+        return Err(Error::custom("color is none"));
+    }
+    let color = color.unwrap();
     serializer.serialize_str(&match color {
         Color::Reset => "Reset".to_string(),
         Color::Red => "Red".to_string(),
@@ -28,11 +31,12 @@ pub fn serialize<S: Serializer>(color: &Color, serializer: S) -> Result<S::Ok, S
     })
 }
 
-pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Color, D::Error> {
+pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Option<Color>, D::Error> {
     use serde::de::{Error, Unexpected};
 
     let mut color_string = String::deserialize(deserializer)?;
-    Ok(match color_string.to_lowercase().as_str() {
+
+    Ok(Some(match color_string.to_lowercase().as_str() {
         "reset" => Color::Reset,
         "red" => Color::Red,
         "green" => Color::Green,
@@ -101,53 +105,47 @@ pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Color, 
                 ))
             }
         },
-    })
+    }))
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn ser() {
-        use super::serialize;
-        use serde::Serialize;
-        use tui::style::Color;
+// #[cfg(test)]
+// mod tests {
+//     #[test]
+//     fn ser() {
+//         use super::serialize;
+//         use serde::Serialize;
+//         use tui::style::Color;
 
-        #[derive(Serialize)]
-        struct Test {
-            #[serde(serialize_with = "serialize")]
-            pub c: Color,
-        }
+//         #[derive(Serialize)]
+//         struct Test {
+//             #[serde(serialize_with = "serialize")]
+//             pub c: Color,
+//         }
 
-        let color: Color = Color::Rgb(18, 252, 28);
-        let t = Test { c: color };
-        let color_string = serde_json::to_string(&t).unwrap();
-        assert_eq!(color_string, r###"{"c":"#12FC1C"}"###);
+//         let color: Color = Color::Rgb(1, 5, 77);
+//         let t = Test { c: color };
+//         println!("{:?}", serde_json::to_string(&t));
 
-        let color: Color = Color::Indexed(123);
-        let t = Test { c: color };
-        let color_string = serde_json::to_string(&t).unwrap();
-        assert_eq!(color_string, r###"{"c":"#123"}"###);
-    }
-    #[test]
-    fn deser() {
-        use super::deserialize;
-        use serde::Deserialize;
-        use tui::style::Color;
+//         let color: Color = Color::Indexed(128);
+//         let t = Test { c: color };
+//         println!("{:?}", serde_json::to_string(&t));
+//     }
+//     #[test]
+//     fn deser() {
+//         use super::deserialize;
+//         use serde::Deserialize;
+//         use tui::style::Color;
+//         #[derive(Debug, Deserialize)]
+//         struct Test {
+//             #[serde(deserialize_with = "deserialize")]
+//             pub c: Color,
+//         }
+//         let color_text = r###"{ "c": "#12fc1c" }"###;
+//         let t = serde_json::from_str::<Test>(color_text);
+//         println!("{:?}", t);
 
-        #[derive(Debug, Deserialize, PartialEq)]
-        struct Test {
-            #[serde(deserialize_with = "deserialize")]
-            pub c: Color,
-        }
-
-        let color: Color = Color::Rgb(18, 252, 28);
-        let color_text = r###"{ "c": "#12fc1c" }"###;
-        let t: Test = serde_json::from_str::<Test>(color_text).unwrap();
-        assert_eq!(t, Test { c: color });
-
-        let color: Color = Color::Indexed(123);
-        let color_text = r###"{ "c": "#123" }"###;
-        let t: Test = serde_json::from_str::<Test>(color_text).unwrap();
-        assert_eq!(t, Test { c: color });
-    }
-}
+//         let color_text = r###"{ "c": "#123" }"###;
+//         let t = serde_json::from_str::<Test>(color_text);
+//         println!("{:?}", t);
+//     }
+// }
