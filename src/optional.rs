@@ -108,44 +108,46 @@ pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Option<
     }))
 }
 
-// #[cfg(test)]
-// mod tests {
-//     #[test]
-//     fn ser() {
-//         use super::serialize;
-//         use serde::Serialize;
-//         use tui::style::Color;
+#[cfg(test)]
+mod tests {
+    use serde::{Deserialize, Serialize};
+    use tui::style::Color;
 
-//         #[derive(Serialize)]
-//         struct Test {
-//             #[serde(serialize_with = "serialize")]
-//             pub c: Color,
-//         }
+    #[derive(Debug, PartialEq, Serialize, Deserialize)]
+    struct Test {
+        #[serde(with = "super")]
+        pub c: Option<Color>,
+    }
 
-//         let color: Color = Color::Rgb(1, 5, 77);
-//         let t = Test { c: color };
-//         println!("{:?}", serde_json::to_string(&t));
+    #[test]
+    fn serialize_index() {
+        let color: Color = Color::Indexed(123);
+        let t = Test { c: Some(color) };
+        let color_string = serde_json::to_string(&t).unwrap();
+        assert_eq!(color_string, r###"{"c":"#123"}"###);
+    }
 
-//         let color: Color = Color::Indexed(128);
-//         let t = Test { c: color };
-//         println!("{:?}", serde_json::to_string(&t));
-//     }
-//     #[test]
-//     fn deser() {
-//         use super::deserialize;
-//         use serde::Deserialize;
-//         use tui::style::Color;
-//         #[derive(Debug, Deserialize)]
-//         struct Test {
-//             #[serde(deserialize_with = "deserialize")]
-//             pub c: Color,
-//         }
-//         let color_text = r###"{ "c": "#12fc1c" }"###;
-//         let t = serde_json::from_str::<Test>(color_text);
-//         println!("{:?}", t);
+    #[test]
+    fn serialize_hex() {
+        let color: Color = Color::Rgb(18, 252, 28);
+        let t = Test { c: Some(color) };
+        let color_string = serde_json::to_string(&t).unwrap();
+        assert_eq!(color_string, r###"{"c":"#12FC1C"}"###);
+    }
 
-//         let color_text = r###"{ "c": "#123" }"###;
-//         let t = serde_json::from_str::<Test>(color_text);
-//         println!("{:?}", t);
-//     }
-// }
+    #[test]
+    fn deserialize_hex() {
+        let color: Color = Color::Rgb(18, 252, 28);
+        let color_text = r###"{ "c": "#12fc1c" }"###;
+        let t: Test = serde_json::from_str::<Test>(color_text).unwrap();
+        assert_eq!(t, Test { c: Some(color) });
+    }
+
+    #[test]
+    fn deserialize_index() {
+        let color: Color = Color::Indexed(123);
+        let color_text = r###"{ "c": "#123" }"###;
+        let t: Test = serde_json::from_str::<Test>(color_text).unwrap();
+        assert_eq!(t, Test { c: Some(color) });
+    }
+}

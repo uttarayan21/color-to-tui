@@ -106,13 +106,12 @@ pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Color, 
 
 #[cfg(test)]
 mod tests {
-    use super::{serialize, deserialize};
     use serde::{Serialize, Deserialize};
     use tui::style::Color;
 
     #[derive(Debug, PartialEq, Serialize, Deserialize)]
     struct Test {
-        #[serde(serialize_with = "serialize", deserialize_with="deserialize")]
+        #[serde(with = "super")]
         pub c: Color,
     }
 
