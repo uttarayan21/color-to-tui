@@ -1,3 +1,4 @@
+#[cfg(feature = "optional")]
 pub mod optional;
 
 use serde::{Deserialize, Deserializer, Serializer};
@@ -106,7 +107,7 @@ pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Color, 
 
 #[cfg(test)]
 mod tests {
-    use serde::{Serialize, Deserialize};
+    use serde::{Deserialize, Serialize};
     use tui::style::Color;
 
     #[derive(Debug, PartialEq, Serialize, Deserialize)]
@@ -130,7 +131,6 @@ mod tests {
         let color_string = serde_json::to_string(&t).unwrap();
         assert_eq!(color_string, r###"{"c":"#12FC1C"}"###);
     }
-
 
     #[test]
     fn deserialize_hex() {

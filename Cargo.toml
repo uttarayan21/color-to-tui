@@ -1,6 +1,6 @@
 [package]
 name = "color-parser-tui"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Uttarayan Mondal <uttarayan21@gmail.com>"]
 edition = "2021"
 description = "Parse colors and convert them to tui::style::Colors"
@@ -17,3 +17,7 @@ tui = { version = "0.16.0", default-features = false }
 
 [dev-dependencies]
 serde_json = "1.0.68"
+
+[features]
+default = ["optional"]
+optional = []
