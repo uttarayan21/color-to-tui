@@ -106,45 +106,43 @@ pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Color, 
 
 #[cfg(test)]
 mod tests {
+    use super::{serialize, deserialize};
+    use serde::{Serialize, Deserialize};
+    use tui::style::Color;
+
+    #[derive(Debug, PartialEq, Serialize, Deserialize)]
+    struct Test {
+        #[serde(serialize_with = "serialize", deserialize_with="deserialize")]
+        pub c: Color,
+    }
+
     #[test]
-    fn ser() {
-        use super::serialize;
-        use serde::Serialize;
-        use tui::style::Color;
-
-        #[derive(Serialize)]
-        struct Test {
-            #[serde(serialize_with = "serialize")]
-            pub c: Color,
-        }
-
-        let color: Color = Color::Rgb(18, 252, 28);
-        let t = Test { c: color };
-        let color_string = serde_json::to_string(&t).unwrap();
-        assert_eq!(color_string, r###"{"c":"#12FC1C"}"###);
-
+    fn serialize_index() {
         let color: Color = Color::Indexed(123);
         let t = Test { c: color };
         let color_string = serde_json::to_string(&t).unwrap();
         assert_eq!(color_string, r###"{"c":"#123"}"###);
     }
+
     #[test]
-    fn deser() {
-        use super::deserialize;
-        use serde::Deserialize;
-        use tui::style::Color;
+    fn serialize_hex() {
+        let color: Color = Color::Rgb(18, 252, 28);
+        let t = Test { c: color };
+        let color_string = serde_json::to_string(&t).unwrap();
+        assert_eq!(color_string, r###"{"c":"#12FC1C"}"###);
+    }
 
-        #[derive(Debug, Deserialize, PartialEq)]
-        struct Test {
-            #[serde(deserialize_with = "deserialize")]
-            pub c: Color,
-        }
 
+    #[test]
+    fn deserialize_hex() {
         let color: Color = Color::Rgb(18, 252, 28);
         let color_text = r###"{ "c": "#12fc1c" }"###;
         let t: Test = serde_json::from_str::<Test>(color_text).unwrap();
         assert_eq!(t, Test { c: color });
+    }
 
+    #[test]
+    fn deserialize_index() {
         let color: Color = Color::Indexed(123);
         let color_text = r###"{ "c": "#123" }"###;
         let t: Test = serde_json::from_str::<Test>(color_text).unwrap();
