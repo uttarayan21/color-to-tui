@@ -1,11 +1,11 @@
 [package]
-name = "color-parser-tui"
+name = "color-to-tui"
 version = "0.1.2"
 authors = ["Uttarayan Mondal <uttarayan21@gmail.com>"]
 edition = "2021"
 description = "Parse colors and convert them to tui::style::Colors"
-homepage = "https://git.uttarayan.me/uttarayan/color-parser-tui"
-repository = "https://git.uttarayan.me/uttarayan/color-parser-tui"
+homepage = "https://git.uttarayan.me/uttarayan/color-to-tui"
+repository = "https://git.uttarayan.me/uttarayan/color-to-tui"
 license = "MIT"
 exclude = [".drone.yml", ".github/*"]
 

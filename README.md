@@ -1,7 +1,7 @@
 # Color -> Tui
 
-[![build](https://img.shields.io/drone/build/uttarayan/color-parser-tui?server=https%3A%2F%2Fdrone.uttarayan.me)][color-parser-tui]
-[![build](https://github.com/uttarayan21/color-parser-tui/actions/workflows/build.yaml/badge.svg)][mirror]  
+[![build](https://img.shields.io/drone/build/uttarayan/color-to-tui?server=https%3A%2F%2Fdrone.uttarayan.me)][color-to-tui]
+[![build](https://github.com/uttarayan21/color-to-tui/actions/workflows/build.yaml/badge.svg)][mirror]  
 
 
 Parse hex colors to tui rgb colors  
@@ -16,9 +16,9 @@ Example
 ```rust
 #[derive(Serialize, Deserialize, PartialEq)]
 sruct ColorStruct {
-    #[serde(with = "color-parser-tui"]
+    #[serde(with = "color_to_tui"]
     color: tui::style::Color,
-    #[serde(with = "color-parser-tui::optional"]
+    #[serde(with = "color_to_tui::optional"]
     optional_color: Option<tui::style::Color>,
 }
 
@@ -35,5 +35,5 @@ assert_eq!(t, c);
 ```
 
 
-[color-parser-tui]: https://git.uttarayan.me/uttarayan/color-parser-tui
-[mirror]: https://github.com/uttarayan21/color-parser-tui
+[color-to-tui]: https://git.uttarayan.me/uttarayan/color-to-tui
+[mirror]: https://github.com/uttarayan21/color-to-tui
