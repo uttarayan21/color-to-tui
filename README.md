@@ -7,11 +7,9 @@ Parse HEX colors to [tui-rs](https://github.com/fdehau/tui-rs)' [Rgb](https://do
 
 ## Example
 
-<span style="color: #C3F111">`#C3F111`</span> -> `Color::Rgb(195,241,17)`
-
-<span style="color: #CFB">`#CFB`</span> -> `Color::Rgb(204,255,187)`
-
-<span style="color: #AFAF00">`142`</span> -> `Color::Indexed(142)`  
+- `#C3F111` -> `Color::Rgb(195,241,17)`
+- `#CFB` -> `Color::Rgb(204,255,187)`
+- `142` -> `Color::Indexed(142)`  
 
 ## Usage
 
