@@ -24,7 +24,7 @@ pub fn serialize<S: Serializer>(color: &Color, serializer: S) -> Result<S::Ok, S
         Color::LightMagenta => "LightMagenta".to_string(),
         Color::LightRed => "LightRed".to_string(),
         Color::LightYellow => "LightYellow".to_string(),
-        Color::Indexed(index) => format!("#{:03}", index),
+        Color::Indexed(index) => format!("{:03}", index),
         Color::Rgb(r, g, b) => format!("#{:02X}{:02X}{:02X}", r, g, b),
     })
 }
@@ -32,7 +32,7 @@ pub fn serialize<S: Serializer>(color: &Color, serializer: S) -> Result<S::Ok, S
 pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Color, D::Error> {
     use serde::de::{Error, Unexpected};
 
-    let mut color_string = String::deserialize(deserializer)?;
+    let color_string = String::deserialize(deserializer)?;
     Ok(match color_string.to_lowercase().as_str() {
         "reset" => Color::Reset,
         "red" => Color::Red,
@@ -53,15 +53,7 @@ pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Color, 
         "lightred" => Color::LightRed,
         "lightyellow" => Color::LightYellow,
         _ => match color_string.len() {
-            4 => {
-                if !color_string.starts_with('#') {
-                    return Err(Error::invalid_value(
-                        Unexpected::Char(color_string.chars().next().unwrap()),
-                        &"# at the start",
-                    ));
-                }
-                color_string.remove(0);
-
+            3 => {
                 let index = color_string.parse::<u8>();
                 if let Ok(index) = index {
                     Color::Indexed(index)
@@ -72,14 +64,29 @@ pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Color, 
                     ));
                 }
             }
-            7 => {
+            4 | 7 => {
                 if !color_string.starts_with('#') {
                     return Err(Error::invalid_value(
                         Unexpected::Char(color_string.chars().next().unwrap()),
                         &"# at the start",
                     ));
                 }
-                let color_string = color_string.trim_start_matches('#');
+
+                let mut color_string = color_string.trim_start_matches('#').to_uppercase();
+
+                let mut temp = String::new();
+
+                if color_string.len() == 3 {
+                    for char in color_string.chars() {
+                        if char == 'F' {
+                            temp += &"FF".to_string();
+                        } else {
+                            temp += &("0".to_owned() + &char.to_string().to_owned());
+                        }
+                    }
+
+                    color_string = temp;
+                }
 
                 let r = u8::from_str_radix(&color_string[0..2], 16);
                 let g = u8::from_str_radix(&color_string[2..4], 16);
@@ -121,7 +128,7 @@ mod tests {
         let color: Color = Color::Indexed(123);
         let t = Test { c: color };
         let color_string = serde_json::to_string(&t).unwrap();
-        assert_eq!(color_string, r###"{"c":"#123"}"###);
+        assert_eq!(color_string, r###"{"c":"123"}"###);
     }
 
     #[test]
@@ -141,9 +148,17 @@ mod tests {
     }
 
     #[test]
+    fn deserialize_short_hex() {
+        let color: Color = Color::Rgb(255, 255, 10);
+        let color_text = r###"{ "c": "#FFA" }"###;
+        let t: Test = serde_json::from_str::<Test>(color_text).unwrap();
+        assert_eq!(t, Test { c: color });
+    }
+
+    #[test]
     fn deserialize_index() {
         let color: Color = Color::Indexed(123);
-        let color_text = r###"{ "c": "#123" }"###;
+        let color_text = r###"{ "c": "123" }"###;
         let t: Test = serde_json::from_str::<Test>(color_text).unwrap();
         assert_eq!(t, Test { c: color });
     }
