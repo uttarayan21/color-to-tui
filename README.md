@@ -3,7 +3,7 @@
 [![build](https://img.shields.io/drone/build/uttarayan/color-to-tui?server=https%3A%2F%2Fdrone.uttarayan.me)][color-to-tui]
 [![build](https://github.com/uttarayan21/color-to-tui/actions/workflows/build.yaml/badge.svg)][mirror]  
 
-Parse HEX colors to [tui-rs](https://github.com/fdehau/tui-rs)'s [Rgb](https://docs.rs/tui/0.16.0/tui/style/enum.Color.html) colors.
+Parse HEX colors to [tui-rs](https://github.com/fdehau/tui-rs)' [Rgb](https://docs.rs/tui/0.16.0/tui/style/enum.Color.html) colors.
 
 ## Example
 
