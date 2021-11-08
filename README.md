@@ -24,7 +24,7 @@ sruct ColorStruct {
     optional_color: Option<tui::style::Color>,
 }
 
-let color_text =  r###"{ "color" : "#12FC1C", "optional_color" : "#123" }"###
+let color_text =  r###"{ "color" : "#12FC1C", "optional_color" : "123" }"###
 let t: ColorStruct = serde_json::from_str::<ColorStruct>(color_text).unwrap();
 
 let c = ColorStruct {
