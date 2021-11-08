@@ -1,17 +1,17 @@
-# Color -> Tui
+# Color -> TUI
 
 [![build](https://img.shields.io/drone/build/uttarayan/color-to-tui?server=https%3A%2F%2Fdrone.uttarayan.me)][color-to-tui]
 [![build](https://github.com/uttarayan21/color-to-tui/actions/workflows/build.yaml/badge.svg)][mirror]  
 
+Parse HEX colors to [tui-rs](https://github.com/fdehau/tui-rs)'s [Rgb](https://docs.rs/tui/0.16.0/tui/style/enum.Color.html) colors.
 
-Parse hex colors to tui rgb colors  
+## Example
 
-<span style="color: #c3f111">`#c3f111`</span> -> `Color::Rgb(195,241,17)`
+<span style="color: #C3F111">`#C3F111`</span> -> `Color::Rgb(195,241,17)`
+<span style="color: #CFB">`#CFB`</span> -> `Color::Rgb(204,255,187)`
+<span style="color: #AFAF00">`142`</span> -> `Color::Indexed(142)`  
 
-Note that the indexed colors are **NOT HEX**  
-<span style="color: #afaf00">`#142`</span> -> `Color::Indexed(142)`  
-
-Example
+## Usage
 
 ```rust
 #[derive(Serialize, Deserialize, PartialEq)]
@@ -31,9 +31,7 @@ let c = ColorStruct {
 };
 
 assert_eq!(t, c);
-
 ```
-
 
 [color-to-tui]: https://git.uttarayan.me/uttarayan/color-to-tui
 [mirror]: https://github.com/uttarayan21/color-to-tui
