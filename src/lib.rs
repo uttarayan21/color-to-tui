@@ -72,25 +72,23 @@ pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Color, 
                     ));
                 }
 
-                let mut color_string = color_string.trim_start_matches('#').to_uppercase();
+                let color_string = color_string.trim_start_matches('#');
 
-                let mut temp = String::new();
+                let (r, g, b);
 
-                if color_string.len() == 3 {
-                    for char in color_string.chars() {
-                        if char == 'F' {
-                            temp += &"FF".to_string();
-                        } else {
-                            temp += &("0".to_owned() + &char.to_string().to_owned());
-                        }
+                match color_string.len() {
+                    6 => {
+                        r = u8::from_str_radix(&color_string[0..2], 16);
+                        g = u8::from_str_radix(&color_string[2..4], 16);
+                        b = u8::from_str_radix(&color_string[4..6], 16);
                     }
-
-                    color_string = temp;
+                    3 => {
+                        r = u8::from_str_radix(&color_string[0..1], 16).map(|r| r * 17);
+                        g = u8::from_str_radix(&color_string[1..2], 16).map(|g| g * 17);
+                        b = u8::from_str_radix(&color_string[2..3], 16).map(|b| b * 17);
+                    }
+                    _ => unreachable!("Can't be reached since already checked"),
                 }
-
-                let r = u8::from_str_radix(&color_string[0..2], 16);
-                let g = u8::from_str_radix(&color_string[2..4], 16);
-                let b = u8::from_str_radix(&color_string[4..6], 16);
 
                 match (r, g, b) {
                     (Ok(r), Ok(g), Ok(b)) => Color::Rgb(r, g, b),
@@ -149,10 +147,19 @@ mod tests {
 
     #[test]
     fn deserialize_short_hex() {
-        let color: Color = Color::Rgb(255, 255, 10);
+        let color: Color = Color::Rgb(255, 255, 170);
         let color_text = r###"{ "c": "#FFA" }"###;
         let t: Test = serde_json::from_str::<Test>(color_text).unwrap();
         assert_eq!(t, Test { c: color });
+    }
+
+    #[test]
+    fn deserialize_hex_and_short_hex() {
+        let color_text_hex = r###"{ "c": "#FF99CC" }"###;
+        let color_text_short_hex = r###"{ "c": "#F9C" }"###;
+        let t_h: Test = serde_json::from_str::<Test>(color_text_hex).unwrap();
+        let t_sh: Test = serde_json::from_str::<Test>(color_text_short_hex).unwrap();
+        assert_eq!(t_h, t_sh);
     }
 
     #[test]
