@@ -12,8 +12,8 @@ exclude = [".drone.yml", ".github/*"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-serde = { version = "1.0.130", features = ["derive"] }
-tui = { version = "0.18.0", default-features = false }
+serde = { version = "1.0", features = ["derive"] }
+tui = { version = "*", default-features = false }
 
 [dev-dependencies]
 serde_json = "1.0.68"
