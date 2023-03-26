@@ -3,7 +3,7 @@
 [![build](https://img.shields.io/drone/build/uttarayan/color-to-tui?server=https%3A%2F%2Fdrone.uttarayan.me)][color-to-tui]
 [![build](https://github.com/uttarayan21/color-to-tui/actions/workflows/build.yaml/badge.svg)][mirror]  
 
-Parse HEX colors to [tui-rs](https://github.com/fdehau/tui-rs)' [Rgb](https://docs.rs/tui/0.16.0/tui/style/enum.Color.html) colors.
+Parse HEX colors to [ratatui](https://github.com/tui-rs-revival/ratatui)'s [Rgb](https://docs.rs/ratatui/latest/ratatui/style/enum.Color.html) colors.
 
 ## Example
 
@@ -17,9 +17,9 @@ Parse HEX colors to [tui-rs](https://github.com/fdehau/tui-rs)' [Rgb](https://do
 #[derive(Serialize, Deserialize, PartialEq)]
 sruct ColorStruct {
     #[serde(with = "color_to_tui"]
-    color: tui::style::Color,
+    color: ratatui::style::Color,
     #[serde(with = "color_to_tui::optional"]
-    optional_color: Option<tui::style::Color>,
+    optional_color: Option<ratatui::style::Color>,
 }
 
 let color_text =  r###"{ "color" : "#12FC1C", "optional_color" : "123" }"###
