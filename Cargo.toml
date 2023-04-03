@@ -1,6 +1,6 @@
 [package]
 name = "color-to-tui"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Uttarayan Mondal <uttarayan21@gmail.com>"]
 edition = "2021"
 description = "Parse colors and convert them to tui::style::Colors"
