@@ -3,7 +3,7 @@ name = "color-to-tui"
 version = "0.3.0"
 authors = ["Uttarayan Mondal <uttarayan21@gmail.com>"]
 edition = "2021"
-description = "Parse colors and convert them to tui::style::Colors"
+description = "Parse colors and convert them to ratatui::style::Colors"
 homepage = "https://git.uttarayan.me/uttarayan/color-to-tui"
 repository = "https://git.uttarayan.me/uttarayan/color-to-tui"
 license = "MIT"
@@ -13,7 +13,7 @@ exclude = [".drone.yml", ".github/*"]
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
-tui = { version = "0.*", default-features = false }
+tui = { package="ratatui", version = "0.*", default-features = false }
 
 [dev-dependencies]
 serde_json = "1.0.68"
