@@ -16,9 +16,9 @@ Parse HEX colors to [ratatui](https://github.com/tui-rs-revival/ratatui)'s [Rgb]
 ```rust
 #[derive(Serialize, Deserialize, PartialEq)]
 sruct ColorStruct {
-    #[serde(with = "color_to_tui"]
+    #[serde(with = "color_to_tui")]
     color: ratatui::style::Color,
-    #[serde(with = "color_to_tui::optional"]
+    #[serde(with = "color_to_tui::optional")]
     optional_color: Option<ratatui::style::Color>,
 }
 
